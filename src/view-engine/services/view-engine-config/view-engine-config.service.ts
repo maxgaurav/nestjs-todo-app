@@ -2,6 +2,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import * as hbs from 'hbs';
 import { join } from 'path';
 import * as layouts from 'handlebars-layout';
+import * as helpers from 'handlebars-helpers';
 
 @Injectable()
 export class ViewEngineConfigService implements OnApplicationBootstrap {
@@ -9,5 +10,6 @@ export class ViewEngineConfigService implements OnApplicationBootstrap {
     hbs.registerPartials(join(process.cwd(), 'views', 'partials'));
     hbs.registerPartials(join(process.cwd(), 'views', 'layouts'));
     layouts.register(hbs.handlebars);
+    helpers(['array', 'comparison'], { handlebars: hbs.handlebars });
   }
 }

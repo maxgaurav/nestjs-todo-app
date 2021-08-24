@@ -9,4 +9,7 @@ export class UserModel extends BaseModel<UserModel> {
 
   @Column
   public password: string | null;
+
+  @Column
+  public is_verified: boolean;
 }

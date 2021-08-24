@@ -7,6 +7,8 @@ import { UserRepoService } from '../user/services/user-repo/user-repo.service';
 import { ModelBootstrapModule } from '../databases/model-bootstrap/model-bootstrap.module';
 import { WebGuard } from './guards/web/web.guard';
 import { LoginWebGuard } from './guards/login-web/login-web.guard';
+import { RegisterController } from './controllers/register/register.controller';
+import { EmailVerificationController } from './controllers/email-verification/email-verification.controller';
 
 @Global()
 @Module({
@@ -19,7 +21,7 @@ import { LoginWebGuard } from './guards/login-web/login-web.guard';
     WebGuard,
     LoginWebGuard,
   ],
-  controllers: [LoginController],
+  controllers: [LoginController, RegisterController, EmailVerificationController],
   exports: [AuthService, HashEncryptService],
 })
 export class AuthModule {}

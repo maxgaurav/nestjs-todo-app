@@ -28,6 +28,11 @@ module.exports = {
         allowNull: true,
         defaultValue: null,
       },
+      is_verified: {
+        type: DataType.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       created_at: {
         type: DataType.DATE,
         allowNull: false,
@@ -48,5 +53,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
+    await queryInterface.dropTable('users');
   },
 };

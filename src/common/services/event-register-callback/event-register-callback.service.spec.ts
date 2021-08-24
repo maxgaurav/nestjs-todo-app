@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventRegisterCallbackService } from './event-register-callback.service';
-import { TransactionProviderService } from '../transaction-provider/transaction-provider.service';
+import { TransactionProviderService } from '../../../transaction-manager/services/transaction-provider/transaction-provider.service';
 
 describe('EventRegisterCallbackService', () => {
   let service: EventRegisterCallbackService;
