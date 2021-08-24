@@ -1,0 +1,14 @@
+{{#gt _errorBag.all.length 0}}
+  <div class="alert alert-danger">
+    <h4 class="alert-heading">Errors</h4>
+    <ul class="text-start">
+      {{#each _errorBag.all}}
+        <li>
+          {{#with this as | errorMessage|}}
+            {{errorMessage}}
+          {{/with}}
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+{{/gt}}

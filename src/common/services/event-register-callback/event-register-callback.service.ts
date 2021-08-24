@@ -15,7 +15,12 @@ export class EventRegisterCallbackService {
   ): CallbackExecutioner {
     if (!!transaction) {
       transaction.afterCommit(async () => {
-        await callback();
+        try {
+          await callback();
+        } catch (err) {
+          console.warn('Unable to process callback');
+          console.error(err);
+        }
       });
       return () => Promise.resolve();
     }
