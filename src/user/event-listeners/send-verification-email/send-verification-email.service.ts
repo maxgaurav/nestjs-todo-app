@@ -28,6 +28,8 @@ export class SendVerificationEmailService {
       query: { token: encryptedContent },
     });
 
+    console.log(signedUrl);
+
     return this.mailService.sendMail({
       to: event.userModel.email,
       subject: 'Verification Email',
