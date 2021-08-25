@@ -19,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       wildcard: true,
       delimiter: '.',
     }),
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [

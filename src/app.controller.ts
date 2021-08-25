@@ -1,13 +1,19 @@
 import { Controller, Get, Render } from '@nestjs/common';
-import { AppService } from './app.service';
+import { UrlGeneratorService } from 'nestjs-url-generator';
+import { LoginController } from './auth/controllers/login/login.controller';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly urlGenerator: UrlGeneratorService) {}
 
   @Get()
-  @Render('welcome')
-  getHello(): { message: string } {
-    return { message: this.appService.getHello() };
+  @Render('login')
+  loginForm(): { loginUrl: string } {
+    return {
+      loginUrl: this.urlGenerator.generateUrlFromController({
+        controller: LoginController,
+        controllerMethod: LoginController.prototype.login,
+      }),
+    };
   }
 }
