@@ -148,7 +148,7 @@ describe('LoginController', () => {
       }),
     );
     expect(saveSpy).toHaveBeenCalledTimes(2);
-    expect(redirectSpy).toHaveBeenCalledWith('/profile');
+    expect(redirectSpy).toHaveBeenCalledWith('/dashboard');
     expect(getSpy).toHaveBeenCalledWith(request);
   });
 
