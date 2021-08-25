@@ -9,6 +9,7 @@ import { WebGuard } from './guards/web/web.guard';
 import { LoginWebGuard } from './guards/login-web/login-web.guard';
 import { RegisterController } from './controllers/register/register.controller';
 import { EmailVerificationController } from './controllers/email-verification/email-verification.controller';
+import { IntendManagerService } from '../session-manager/services/intend-manager/intend-manager.service';
 
 @Global()
 @Module({
@@ -20,8 +21,13 @@ import { EmailVerificationController } from './controllers/email-verification/em
     UserRepoService,
     WebGuard,
     LoginWebGuard,
+    IntendManagerService
   ],
-  controllers: [LoginController, RegisterController, EmailVerificationController],
+  controllers: [
+    LoginController,
+    RegisterController,
+    EmailVerificationController,
+  ],
   exports: [AuthService, HashEncryptService],
 })
 export class AuthModule {}

@@ -41,7 +41,7 @@ export class RegisterController {
    * @param registerData
    * @param transaction
    */
-  @Redirect('/register')
+  @Redirect('/dashboard')
   @UseInterceptors(TransactionInterceptor)
   @Post()
   public async register(
