@@ -12,3 +12,8 @@ body.signin {
   padding: 15px;
   margin: auto;
 }
+
+.sidebar {
+  height: calc(100vh - 112px);
+  margin-top: 56px;
+}

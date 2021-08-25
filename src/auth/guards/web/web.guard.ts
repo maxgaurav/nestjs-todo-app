@@ -44,6 +44,7 @@ export class WebGuard extends AuthGuard('local') {
           if (err instanceof NotFoundException) {
             return of(false);
           }
+          UnauthorizedException;
           return throwError(err);
         }),
       )

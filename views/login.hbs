@@ -2,8 +2,8 @@
   {{#content "bodyClass"}}text-center signin{{/content}}
   {{#content "mainClass"}}form-signin{{/content}}
   {{#content "mainContent"}}
-    <form method="POST" action="{{registerUrl}}">
-      <h1 class="h3 mb-3 fw-normal">Register user</h1>
+    <form method="POST" action="{{loginUrl}}">
+      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
       {{> error_messages}}
       <div class="form-floating">
         <input type="email" class="form-control" name="email" value="{{_oldInputs.email}}" id="floatingInput"
@@ -14,12 +14,8 @@
         <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
         <label for="floatingPassword">Password</label>
       </div>
-      <div class="form-floating">
-        <input type="password" class="form-control" name="confirm_password" id="floatingPassword" placeholder="Confirm Password">
-        <label for="floatingPassword">Confirm Password</label>
-      </div>
 
-      <button class="w-100 btn btn-lg btn-primary" type="submit">Register</button>
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
       <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
     </form>
   {{/content}}

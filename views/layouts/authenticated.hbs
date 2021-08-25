@@ -1,0 +1,21 @@
+{{#extend "main" filename="./views/layouts/authenticated"}}
+  {{#content "htmlClass"}}h-100{{/content}}
+  {{#content "bodyClass"}}d-flex flex-column h-100{{/content}}
+  {{#content "headerContent"}}
+    {{> header}}
+  {{/content}}
+  {{#content "mainClass"}}flex-shrink-0{{/content}}
+  {{#content "mainContent"}}
+    <div class="container-fluid">
+      <div class="row">
+        {{> left_menu}}
+          <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            {{#block "viewContent"}}{{/block}}
+          </main>
+      </div>
+    </div>
+  {{/content}}
+  {{#content "footerContent"}}
+    {{> footer}}
+  {{/content}}
+{{/extend}}
