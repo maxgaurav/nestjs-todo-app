@@ -5,3 +5,4 @@ export const SESSION_FLASH_HELPER_WARNING = 'flashWarning';
 export const SESSION_FLASH_HELPER_INFO = 'flashInfo';
 export const SESSION_FLASH_HELPER_DEFAULT = 'flashDefault';
 export const SESSION_FLASH_HELPER_ERROR = 'flashError';
+export const SESSION_FLASH_INTENDS_KEY = 'flashIntend';

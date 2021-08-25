@@ -1,23 +1,65 @@
-import { Controller, Post, Redirect, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
+import {
+  Controller,
+  Post,
+  Redirect,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
 import { UserModel } from '../../../databases/models/user.model';
 import { LoginWebGuard } from '../../guards/login-web/login-web.guard';
 import { AuthService } from '../../services/auth/auth.service';
 import { WebGuard } from '../../guards/web/web.guard';
+import { IntendManagerService } from '../../../session-manager/services/intend-manager/intend-manager.service';
 
 @Controller('auth')
 export class LoginController {
-  constructor(private authService: AuthService) {}
+  /**
+   * Default redirect url
+   * @protected
+   */
+  protected defaultRedirectUrl = '/dashboard';
 
-  @Redirect('/dashboard')
+  constructor(
+    private authService: AuthService,
+    private intendManager: IntendManagerService,
+  ) {}
+
   @UseGuards(LoginWebGuard)
-  @Post('login')
-  public login(@Req() request: Request) {
-    this.authService.mapSessionWithUser(
+  @Post()
+  public async login(@Req() request: Request, @Res() response: Response) {
+    await this.authService.mapSessionWithUser(
       request.session as any,
       request.user as UserModel,
     );
-    return request.user;
+
+    const redirectUrl = this.getRedirectUrl(request);
+    return new Promise<void>((res, rej) => {
+      request.session.save((err) => {
+        if (!!err) {
+          rej(err);
+          return;
+        }
+        response.redirect(redirectUrl);
+        res();
+      });
+    });
+  }
+
+  /**
+   * Returns the redirect url
+   * @param request
+   */
+  public getRedirectUrl(request: Request): string {
+    const intendUrl = this.intendManager.getUrl(request);
+
+    if (!!intendUrl) {
+      this.intendManager.setUrl(request, null);
+      return intendUrl;
+    }
+
+    return this.defaultRedirectUrl;
   }
 
   @Redirect('/')
