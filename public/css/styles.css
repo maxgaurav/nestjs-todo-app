@@ -24,3 +24,7 @@ body.signin {
 .form-group {
   margin-bottom: 20px;
 }
+
+.float-right {
+  float: right !important;
+}

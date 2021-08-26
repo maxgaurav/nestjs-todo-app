@@ -1,5 +1,8 @@
 {{#extend "./../views/layouts/authenticated" filename="auth/dashboard"}}
-  {{#content "viewContentHeading"}}Dashboard{{/content}}
+  {{#content "viewContentHeading"}}
+      Dashboard
+      <a href="/tasks/create" class="btn btn-primary float-right">Create Task</a>
+  {{/content}}
   {{#content "viewContent"}}
     <div class="card">
       <div class="card-header">
