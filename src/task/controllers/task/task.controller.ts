@@ -24,6 +24,7 @@ import { UrlGeneratorService } from 'nestjs-url-generator';
 import { TaskModel } from '../../../databases/models/task.model';
 import { MapTaskPipe } from '../../param-mappers/map-task/map-task.pipe';
 import { RedirectRouteInterceptor } from '../../../common/interceptors/redirect-route/redirect-route.interceptor';
+import { TaskBelongsToUserInterceptor } from '../../interceptors/task-belongs-to-user/task-belongs-to-user.interceptor';
 
 @UseInterceptors(SessionErrorValidationInterceptor, OldInputsInterceptor)
 @UseGuards(WebGuard)
@@ -65,6 +66,11 @@ export class TaskController {
     return this.taskRepo.createTask(storeTaskDto, user, transaction);
   }
 
+  /**
+   * Returns edit view
+   * @param task
+   */
+  @UseInterceptors(TaskBelongsToUserInterceptor)
   @Render('auth/tasks/task-edit')
   @Get(':taskId/edit')
   public async edit(
@@ -80,7 +86,14 @@ export class TaskController {
     };
   }
 
+  /**
+   * Updates the task
+   * @param task
+   * @param updateTaskDto
+   * @param transaction
+   */
   @UseInterceptors(
+    TaskBelongsToUserInterceptor,
     new RedirectRouteInterceptor<TaskModel>((task) => `/tasks/${task.id}/edit`),
     TransactionInterceptor,
   )
