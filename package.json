@@ -131,7 +131,7 @@
       "!view-engine/services/view-engine-config/**/*.(t|j)s",
       "!session-manager/services/session-config/**/*.(t|j)s",
       "!**/decorators/**/*.(t|j)s",
-      "!databases/models/**/*(t|j)s"
+      "!databases/models/**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

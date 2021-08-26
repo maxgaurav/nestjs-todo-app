@@ -95,4 +95,34 @@ describe('TaskRepoService', () => {
       transaction,
     });
   });
+
+  it('should update the task with new data', async () => {
+    const data: Partial<
+      Pick<TaskModel, 'name' | 'description' | 'due_on' | 'completed_on'>
+    > = {
+      name: 'name',
+      completed_on: new Date(),
+      due_on: new Date(),
+      description: 'description',
+    };
+
+    const task: TaskModel = {
+      id: 1,
+      save: (value) => value,
+      setAttributes: (value) => value,
+    } as any;
+
+    const transaction = null;
+
+    const setAttributesSpy = jest
+      .spyOn(task, 'setAttributes')
+      .mockReturnValue(task);
+    const saveSpy = jest
+      .spyOn(task, 'save')
+      .mockReturnValue(Promise.resolve(task));
+
+    expect(await service.updateTask(data, task, transaction)).toEqual(task);
+    expect(setAttributesSpy).toHaveBeenCalledWith(data);
+    expect(saveSpy).toHaveBeenCalledWith({ transaction });
+  });
 });
