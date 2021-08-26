@@ -53,4 +53,20 @@ export class TaskRepoService {
       .save({ transaction })
       .then((task) => task.reload({ transaction }));
   }
+
+  /**
+   * Update task with values
+   * @param data
+   * @param task
+   * @param transaction
+   */
+  public updateTask(
+    data: Partial<
+      Pick<TaskModel, 'name' | 'description' | 'due_on' | 'completed_on'>
+    >,
+    task: TaskModel,
+    transaction?: Transaction,
+  ): Promise<TaskModel> {
+    return task.setAttributes(data).save({ transaction });
+  }
 }

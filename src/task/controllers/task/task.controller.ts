@@ -2,7 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   Redirect,
   Render,
   UseGuards,
@@ -20,6 +22,8 @@ import { OldInputsInterceptor } from '../../../session-manager/interceptors/old-
 import { StoreTaskDto } from '../../dtos/store-task/store-task.dto';
 import { UrlGeneratorService } from 'nestjs-url-generator';
 import { TaskModel } from '../../../databases/models/task.model';
+import { MapTaskPipe } from '../../param-mappers/map-task/map-task.pipe';
+import { RedirectRouteInterceptor } from '../../../common/interceptors/redirect-route/redirect-route.interceptor';
 
 @UseInterceptors(SessionErrorValidationInterceptor, OldInputsInterceptor)
 @UseGuards(WebGuard)
@@ -59,5 +63,34 @@ export class TaskController {
     @ReqTransaction() transaction?: Transaction,
   ): Promise<TaskModel> {
     return this.taskRepo.createTask(storeTaskDto, user, transaction);
+  }
+
+  @Render('auth/tasks/task-edit')
+  @Get(':taskId/edit')
+  public async edit(
+    @Param('taskId', MapTaskPipe) task: TaskModel,
+  ): Promise<{ task: TaskModel; [key: string]: any }> {
+    return {
+      updateTaskUrl: this.urlGenerator.generateUrlFromController({
+        controller: TaskController,
+        controllerMethod: TaskController.prototype.update,
+        params: { taskId: task.id },
+      }),
+      task,
+    };
+  }
+
+  @UseInterceptors(
+    new RedirectRouteInterceptor<TaskModel>((task) => `/tasks/${task.id}/edit`),
+    TransactionInterceptor,
+  )
+  @Put(':taskId')
+  public async update(
+    @Param('taskId', MapTaskPipe) task: TaskModel,
+    @Body()
+    updateTaskDto: StoreTaskDto,
+    @ReqTransaction() transaction?: Transaction,
+  ): Promise<TaskModel> {
+    return this.taskRepo.updateTask(updateTaskDto, task, transaction);
   }
 }

@@ -1,4 +1,9 @@
-import { ClassSerializerInterceptor, Module } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EnvironmentModule } from './environment/environment.module';
@@ -22,6 +27,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { TaskModule } from './task/task.module';
 import { WebGuard } from './auth/guards/web/web.guard';
+import { MethodChangeMiddleware } from './helpers/middlewares/method-change/method-change.middleware';
 
 @Module({
   imports: [
@@ -60,4 +66,8 @@ import { WebGuard } from './auth/guards/web/web.guard';
     WebGuard,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): any {
+    consumer.apply(MethodChangeMiddleware).forRoutes('*');
+  }
+}
