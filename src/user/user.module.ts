@@ -6,6 +6,10 @@ import { UniqueEmailValidatorService } from './validators/unique-email-validator
 
 @Module({
   imports: [ModelBootstrapModule.register()],
-  providers: [UserRepoService, SendVerificationEmailService, UniqueEmailValidatorService],
+  providers: [
+    UserRepoService,
+    SendVerificationEmailService,
+    UniqueEmailValidatorService,
+  ],
 })
 export class UserModule {}

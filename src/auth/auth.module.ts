@@ -21,7 +21,7 @@ import { IntendManagerService } from '../session-manager/services/intend-manager
     UserRepoService,
     WebGuard,
     LoginWebGuard,
-    IntendManagerService
+    IntendManagerService,
   ],
   controllers: [
     LoginController,
