@@ -20,6 +20,8 @@ import { UserModule } from './user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { TaskModule } from './task/task.module';
+import { WebGuard } from './auth/guards/web/web.guard';
 
 @Module({
   imports: [
@@ -46,6 +48,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
       delimiter: '.',
     }),
     DashboardModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [
@@ -54,6 +57,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     ClassSerializerInterceptor,
     LoggingService,
     UrlConfigServiceService,
+    WebGuard,
   ],
 })
 export class AppModule {}
