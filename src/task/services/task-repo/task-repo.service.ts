@@ -9,6 +9,18 @@ export class TaskRepoService {
   constructor(@InjectModel(TaskModel) public taskModel: typeof TaskModel) {}
 
   /**
+   * Returns list of task created by user
+   * @param user
+   * @param transaction
+   */
+  public listTaskForUser(
+    user: UserModel,
+    transaction?: Transaction,
+  ): Promise<TaskModel[]> {
+    return this.taskModel.findAll({ where: { user_id: user.id }, transaction });
+  }
+
+  /**
    * Find task by id or fail
    * @param taskId
    * @param transaction
