@@ -50,4 +50,13 @@ describe('MatchValidator', () => {
       } as any),
     ).toEqual(false);
   });
+
+  it('should return default error message', () => {
+    expect(
+      validator.defaultMessage({
+        constraints: ['prop'],
+        property: 'test',
+      } as any),
+    ).toEqual('test must match prop');
+  });
 });

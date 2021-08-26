@@ -19,6 +19,7 @@ import { SessionErrorValidationInterceptor } from '../../../session-manager/inte
 import { OldInputsInterceptor } from '../../../session-manager/interceptors/old-inputs/old-inputs.interceptor';
 import { StoreTaskDto } from '../../dtos/store-task/store-task.dto';
 import { UrlGeneratorService } from 'nestjs-url-generator';
+import { TaskModel } from '../../../databases/models/task.model';
 
 @UseInterceptors(SessionErrorValidationInterceptor, OldInputsInterceptor)
 @UseGuards(WebGuard)
@@ -56,7 +57,7 @@ export class TaskController {
     @Body() storeTaskDto: StoreTaskDto,
     @AuthUser() user: UserModel,
     @ReqTransaction() transaction?: Transaction,
-  ) {
+  ): Promise<TaskModel> {
     return this.taskRepo.createTask(storeTaskDto, user, transaction);
   }
 }
