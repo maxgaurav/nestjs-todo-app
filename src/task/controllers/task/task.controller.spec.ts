@@ -12,6 +12,7 @@ describe('TaskController', () => {
 
   const taskRepo: TaskRepoService = {
     createTask: (value) => value,
+    updateTask: (value) => value,
   } as any;
   const urlGenerator: UrlGeneratorService = {
     generateUrlFromController: (value) => value,
@@ -77,5 +78,42 @@ describe('TaskController', () => {
       task,
     );
     expect(createSpy).toHaveBeenCalledWith(storeTaskDto, user, transaction);
+  });
+
+  it('should return content to render edit view of task', async () => {
+    const task: TaskModel = { id: 1 } as any;
+    const generateUrlSpy = jest
+      .spyOn(urlGenerator, 'generateUrlFromController')
+      .mockReturnValue('updateUrl');
+
+    expect(await controller.edit(task)).toEqual(
+      expect.objectContaining({
+        task,
+        updateTaskUrl: 'updateUrl',
+      }),
+    );
+
+    expect(generateUrlSpy).toHaveBeenCalledWith({
+      controller: TaskController,
+      controllerMethod: TaskController.prototype.update,
+      params: { taskId: task.id },
+    });
+  });
+
+  it('should update the task content with data', async () => {
+    const task: TaskModel = { id: 1 } as any;
+    const data: StoreTaskDto = new StoreTaskDto();
+    data.name = 'name';
+    data.due_on = new Date();
+    data.description = 'Description';
+
+    const transaction = null;
+
+    const updateSpy = jest
+      .spyOn(taskRepo, 'updateTask')
+      .mockReturnValue(Promise.resolve(task));
+
+    expect(await controller.update(task, data, transaction)).toEqual(task);
+    expect(updateSpy).toHaveBeenCalledWith(task, data, transaction);
   });
 });

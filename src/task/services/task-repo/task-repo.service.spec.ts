@@ -121,7 +121,7 @@ describe('TaskRepoService', () => {
       .spyOn(task, 'save')
       .mockReturnValue(Promise.resolve(task));
 
-    expect(await service.updateTask(data, task, transaction)).toEqual(task);
+    expect(await service.updateTask(task, data, transaction)).toEqual(task);
     expect(setAttributesSpy).toHaveBeenCalledWith(data);
     expect(saveSpy).toHaveBeenCalledWith({ transaction });
   });

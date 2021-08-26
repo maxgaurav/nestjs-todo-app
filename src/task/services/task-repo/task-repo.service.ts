@@ -61,10 +61,10 @@ export class TaskRepoService {
    * @param transaction
    */
   public updateTask(
+    task: TaskModel,
     data: Partial<
       Pick<TaskModel, 'name' | 'description' | 'due_on' | 'completed_on'>
     >,
-    task: TaskModel,
     transaction?: Transaction,
   ): Promise<TaskModel> {
     return task.setAttributes(data).save({ transaction });
