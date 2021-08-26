@@ -91,6 +91,6 @@ export class TaskController {
     updateTaskDto: StoreTaskDto,
     @ReqTransaction() transaction?: Transaction,
   ): Promise<TaskModel> {
-    return this.taskRepo.updateTask(updateTaskDto, task, transaction);
+    return this.taskRepo.updateTask(task, updateTaskDto, transaction);
   }
 }
