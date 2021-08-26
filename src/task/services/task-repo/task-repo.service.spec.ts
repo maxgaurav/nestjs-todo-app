@@ -10,6 +10,7 @@ describe('TaskRepoService', () => {
   const model: typeof TaskModel = {
     findByPk: (value) => value,
     build: (value) => value,
+    findAll: (value) => value,
   } as any;
 
   beforeEach(async () => {
@@ -78,5 +79,20 @@ describe('TaskRepoService', () => {
     expect(setAttributeSpy).toHaveBeenNthCalledWith(2, { user_id: user.id });
     expect(saveSpy).toHaveBeenCalledWith({ transaction });
     expect(reloadSpy).toHaveBeenCalledWith({ transaction });
+  });
+
+  it('should return list of tasks mapped to user', async () => {
+    const user: UserModel = { id: 1 } as any;
+    const task: TaskModel = { id: 1, user_id: user.id } as any;
+    const findAllSpy = jest
+      .spyOn(model, 'findAll')
+      .mockReturnValue(Promise.resolve([task]));
+
+    const transaction = null;
+    expect(await service.listTaskForUser(user, transaction)).toEqual([task]);
+    expect(findAllSpy).toHaveBeenCalledWith({
+      where: { user_id: user.id },
+      transaction,
+    });
   });
 });
