@@ -11,11 +11,11 @@ import { UrlGeneratorService } from 'nestjs-url-generator';
 import { RegisterUserDto } from '../../dtos/register-user/register-user.dto';
 import { OldInputsInterceptor } from '../../../session-manager/interceptors/old-inputs/old-inputs.interceptor';
 import { SessionErrorValidationInterceptor } from '../../../session-manager/interceptors/session-error-validation/session-error-validation.interceptor';
-import { TransactionInterceptor } from '../../../helpers/interceptors/transaction/transaction.interceptor';
 import { ReqTransaction } from '../../../transaction-manager/decorators/transaction/transaction.decorator';
 import { Transaction } from 'sequelize';
 import { UserRepoService } from '../../../user/services/user-repo/user-repo.service';
 import { UserModel } from '../../../databases/models/user.model';
+import { TransactionInterceptor } from '../../../transaction-manager/interceptors/transaction/transaction.interceptor';
 
 @UseInterceptors(OldInputsInterceptor, SessionErrorValidationInterceptor)
 @Controller('register')

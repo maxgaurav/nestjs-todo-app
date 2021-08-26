@@ -9,11 +9,4 @@ export class DashboardController {
   public dashboard() {
     return {};
   }
-
-  @UseGuards(WebGuard)
-  @Render('auth/dashboard')
-  @Get('test')
-  public sample() {
-    return {};
-  }
 }

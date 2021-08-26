@@ -54,7 +54,7 @@ export class UserRepoService {
    * @param transaction
    */
   public findOrFail(id: number, transaction?: Transaction): Promise<UserModel> {
-    return this.userModel.findByPk(id, { transaction });
+    return this.userModel.findByPk(id, { transaction, rejectOnEmpty: true });
   }
 
   /**

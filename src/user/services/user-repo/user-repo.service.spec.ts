@@ -97,7 +97,7 @@ describe('UserRepoService', () => {
       userModel,
     );
 
-    expect(findSpy).toHaveBeenCalledWith(userModel.id, { transaction });
+    expect(findSpy).toHaveBeenCalledWith(userModel.id, { transaction, rejectOnEmpty: true });
   });
 
   it('should return user when find by email results in user', async () => {
