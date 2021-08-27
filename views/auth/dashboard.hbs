@@ -1,7 +1,7 @@
 {{#extend "./../views/layouts/authenticated" filename="auth/dashboard"}}
   {{#content "viewContentHeading"}}
-      Dashboard
-      <a href="/tasks/create" class="btn btn-primary float-right">Create Task</a>
+    Dashboard
+    <a href="/tasks/create" class="btn btn-primary float-right">Create Task</a>
   {{/content}}
   {{#content "viewContent"}}
     <div class="card">
@@ -12,10 +12,10 @@
         <table class="table table-striped table-bordered">
           <thead>
           <tr>
-            <th>Name</th>
-            <th>Due On</th>
-            <th>Completed on</th>
-            <th>Actions</th>
+            <th width="25%">Name</th>
+            <th width="25%">Due On</th>
+            <th width="25%">Completed on</th>
+            <th width="25%">Actions</th>
           </tr>
           </thead>
           <tbody>
@@ -25,7 +25,22 @@
                 <td>{{task.name}}</td>
                 <td>{{task.due_on}}</td>
                 <td>{{task.completed_on}}</td>
-                <td><a href="/tasks/{{task.id}}/edit" class="btn btn-primary">Edit</a></td>
+                <td>
+                  <a href="/tasks/{{task.id}}/edit" class="btn btn-primary mr-2">Edit</a>
+                  {{#isNull task.completed_on}}
+                    <form action="/tasks/{{task.id}}/mark-complete" method="POST">
+                      <input type="hidden" value="patch" name="_method">
+                      <button type="submit" class="btn btn-success">Mark Complete</button>
+                    </form>
+                  {{else}}
+                    <form action="/tasks/{{task.id}}/mark-in-complete" method="POST">
+                      <input type="hidden" value="patch" name="_method">
+                      <button class="btn btn-danger" type="submit">Mark In Complete
+                      </button>
+                    </form>
+                  {{/isNull}}
+
+                </td>
               </tr>
             {{/with}}
           {{/each}}

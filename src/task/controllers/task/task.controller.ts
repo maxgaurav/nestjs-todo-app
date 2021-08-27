@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Redirect,
@@ -105,5 +106,39 @@ export class TaskController {
     @ReqTransaction() transaction?: Transaction,
   ): Promise<TaskModel> {
     return this.taskRepo.updateTask(task, updateTaskDto, transaction);
+  }
+
+  /**
+   * Marks task complete
+   * @param task
+   * @param transaction
+   */
+  @Redirect('/dashboard')
+  @UseInterceptors(TaskBelongsToUserInterceptor, TransactionInterceptor)
+  @Patch(':taskId/mark-complete')
+  public async markComplete(
+    @Param('taskId', MapTaskPipe) task: TaskModel,
+    @ReqTransaction() transaction?: Transaction,
+  ): Promise<TaskModel> {
+    return this.taskRepo.updateTask(
+      task,
+      { completed_on: new Date() },
+      transaction,
+    );
+  }
+
+  /**
+   * Marks task complete
+   * @param task
+   * @param transaction
+   */
+  @Redirect('/dashboard')
+  @UseInterceptors(TaskBelongsToUserInterceptor, TransactionInterceptor)
+  @Patch(':taskId/mark-in-complete')
+  public async markInComplete(
+    @Param('taskId', MapTaskPipe) task: TaskModel,
+    @ReqTransaction() transaction?: Transaction,
+  ): Promise<TaskModel> {
+    return this.taskRepo.updateTask(task, { completed_on: null }, transaction);
   }
 }

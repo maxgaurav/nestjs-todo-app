@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   SequelizeModuleOptions,
@@ -7,6 +7,7 @@ import {
 import { ConnectionNames } from '../../connection-names';
 import { UserModel } from '../../models/user.model';
 import { TaskModel } from '../../models/task.model';
+import { LoggingService } from '../../../services/logging/logging.service';
 
 @Injectable()
 export class DatabaseConfigService implements SequelizeOptionsFactory {
@@ -19,6 +20,12 @@ export class DatabaseConfigService implements SequelizeOptionsFactory {
     const config = this.configService.get<SequelizeModuleOptions>(
       `databases.${connectionName}`,
     );
+
+    if (!!config.logging) {
+      const logger = new LoggingService(this.configService);
+      config.logging = (sql, timing) =>
+        logger.debug(`Executed ${sql} Elapsed time: ${timing}`);
+    }
 
     // @todo find way to auto detect models
     // add all the model classes here
