@@ -5,7 +5,6 @@ import {
   NestModule,
 } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { EnvironmentModule } from './environment/environment.module';
 import { DatabasesModule } from './databases/databases.module';
 import { HealthModule } from './health/health.module';
@@ -58,7 +57,6 @@ import { MethodChangeMiddleware } from './helpers/middlewares/method-change/meth
   ],
   controllers: [AppController],
   providers: [
-    AppService,
     NotFoundConverterInterceptor,
     ClassSerializerInterceptor,
     LoggingService,

@@ -8,6 +8,16 @@ import {
   ValidateIf,
 } from 'class-validator';
 
+export const skipDueOnValidation = (
+  obj: Partial<Record<keyof StoreTaskDto, any>>,
+): boolean => {
+  if (obj.due_on === undefined || obj.due_on === null || obj.due_on === '') {
+    obj.due_on = null;
+  }
+
+  return !!obj.due_on;
+};
+
 export class StoreTaskDto {
   @IsNotEmpty()
   @IsString()
@@ -19,17 +29,7 @@ export class StoreTaskDto {
   @IsString()
   public description: string | null;
 
-  @ValidateIf((obj: StoreTaskDto) => {
-    if (
-      obj.due_on === undefined ||
-      obj.due_on === null ||
-      (obj as any).due_on === ''
-    ) {
-      obj.due_on = null;
-    }
-
-    return !!obj.due_on;
-  })
+  @ValidateIf(skipDueOnValidation)
   @IsDateString()
   public due_on: null | Date;
 }

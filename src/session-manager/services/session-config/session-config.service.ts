@@ -12,6 +12,9 @@ import { LoggingService } from '../../../services/logging/logging.service';
 export class SessionConfigService {
   constructor(private configService: ConfigService) {}
 
+  /**
+   * Returns session manager
+   */
   public async session(): Promise<RequestHandler> {
     const sessionConfig = this.configService.get<SessionConfig>('session');
     let sessionStore: Store;
