@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   SequelizeModuleOptions,
@@ -22,9 +22,7 @@ export class DatabaseConfigService implements SequelizeOptionsFactory {
     );
 
     if (!!config.logging) {
-      const logger = new LoggingService(this.configService);
-      config.logging = (sql, timing) =>
-        logger.debug(`Executed ${sql} Elapsed time: ${timing}`);
+      config.logging = this.logger();
     }
 
     // @todo find way to auto detect models
@@ -32,5 +30,14 @@ export class DatabaseConfigService implements SequelizeOptionsFactory {
     config.models = [UserModel, TaskModel];
 
     return config;
+  }
+
+  /**
+   * Returns logger function
+   */
+  public logger(): (sql: string, timing: number | undefined) => void {
+    const logger = new LoggingService(this.configService);
+    return (sql, timing) =>
+      logger.debug(`Executed ${sql} Elapsed time: ${timing}`);
   }
 }
