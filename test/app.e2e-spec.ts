@@ -13,7 +13,7 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect((res) => {
-        expect(res.text).toContain('Hello World!');
+        expect(res.text).toContain('Please sign in');
       });
   });
 });
