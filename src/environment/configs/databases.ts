@@ -29,6 +29,7 @@ export const databaseConfig = () => {
     models: [__dirname + '/../../databases/models/*.ts'],
     migrationDirectory: __dirname + '/../../databases/migrations',
     seedingDirectory: __dirname + '/../../databases/seeds',
+    isolationLevel: process.env.DB_TRANSACTION_ISOLATION_LEVEL,
   } as DatabaseConnectionConfig;
   return config;
 };

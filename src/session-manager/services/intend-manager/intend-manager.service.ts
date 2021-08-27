@@ -45,9 +45,13 @@ export class IntendManagerService {
    * @param request
    */
   public getIntend(request: Request): IntendContent {
-    const intendContent: IntendContent = JSON.parse(
-      request.flash(this.intendFlashKey())[0],
-    );
+    let intendContent: IntendContent;
+    try {
+      intendContent = JSON.parse(request.flash(this.intendFlashKey())[0]);
+    } catch {
+      this.setupIntend(request);
+      intendContent = JSON.parse(request.flash(this.intendFlashKey())[0]);
+    }
 
     this.updateContent(request, intendContent);
 
