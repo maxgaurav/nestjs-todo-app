@@ -6,19 +6,26 @@ import { SessionConfig } from '../../../environment/interfaces/environment-types
 import { MemoryStore, Store } from 'express-session';
 import { FileStore } from '../../session-stores/file-store/file-store';
 import { join } from 'path';
+import { LoggingService } from '../../../services/logging/logging.service';
 
 @Injectable()
 export class SessionConfigService {
   constructor(private configService: ConfigService) {}
 
+  /**
+   * Returns session manager
+   */
   public async session(): Promise<RequestHandler> {
     const sessionConfig = this.configService.get<SessionConfig>('session');
     let sessionStore: Store;
 
     switch (sessionConfig.driver) {
       case 'file':
+        const logger = new LoggingService(this.configService);
         sessionStore = await new FileStore(session, {
           path: join(process.cwd(), 'storage', 'session'),
+          logFn: (...args) =>
+            args.forEach((arg) => logger.debug(arg, 'SessionModule')),
         }).store();
         break;
       case 'memory':

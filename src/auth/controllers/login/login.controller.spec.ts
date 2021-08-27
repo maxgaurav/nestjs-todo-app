@@ -191,4 +191,45 @@ describe('LoginController', () => {
     expect(redirectSpy).not.toHaveBeenCalled();
     expect(successSpy).toHaveBeenCalled();
   });
+
+  it('should logout user from session', async () => {
+    const request = {
+      session: {
+        regenerate: (value) => value,
+      },
+    };
+
+    const regenerateSpy = jest
+      .spyOn(request.session, 'regenerate')
+      .mockImplementation((callback: () => void) => callback());
+
+    expect(await controller.logout(request as any)).toEqual(true);
+    expect(regenerateSpy).toHaveBeenCalled();
+  });
+
+  it('should throw error when regenerate fails', async () => {
+    const request = {
+      session: {
+        regenerate: (value) => value,
+      },
+    };
+
+    const regenerateSpy = jest
+      .spyOn(request.session, 'regenerate')
+      .mockImplementation((callback: (err: string) => void) =>
+        callback('should fail'),
+      );
+
+    let errorThrown = false;
+    try {
+      await controller.logout(request as any);
+    } catch (err) {
+      if (err === 'should fail') {
+        errorThrown = true;
+      }
+    }
+
+    expect(errorThrown).toEqual(true);
+    expect(regenerateSpy).toHaveBeenCalled();
+  });
 });

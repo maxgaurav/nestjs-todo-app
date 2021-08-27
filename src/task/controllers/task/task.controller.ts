@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Redirect,
@@ -23,8 +24,14 @@ import { StoreTaskDto } from '../../dtos/store-task/store-task.dto';
 import { UrlGeneratorService } from 'nestjs-url-generator';
 import { TaskModel } from '../../../databases/models/task.model';
 import { MapTaskPipe } from '../../param-mappers/map-task/map-task.pipe';
-import { RedirectRouteInterceptor } from '../../../common/interceptors/redirect-route/redirect-route.interceptor';
+import {
+  RedirectRouteInterceptor,
+  RedirectUrlGenerator,
+} from '../../../common/interceptors/redirect-route/redirect-route.interceptor';
 import { TaskBelongsToUserInterceptor } from '../../interceptors/task-belongs-to-user/task-belongs-to-user.interceptor';
+
+export const editTaskRedirect: RedirectUrlGenerator<TaskModel> = (task) =>
+  `/tasks/${task.id}/edit`;
 
 @UseInterceptors(SessionErrorValidationInterceptor, OldInputsInterceptor)
 @UseGuards(WebGuard)
@@ -94,7 +101,7 @@ export class TaskController {
    */
   @UseInterceptors(
     TaskBelongsToUserInterceptor,
-    new RedirectRouteInterceptor<TaskModel>((task) => `/tasks/${task.id}/edit`),
+    new RedirectRouteInterceptor<TaskModel>(editTaskRedirect),
     TransactionInterceptor,
   )
   @Put(':taskId')
@@ -105,5 +112,39 @@ export class TaskController {
     @ReqTransaction() transaction?: Transaction,
   ): Promise<TaskModel> {
     return this.taskRepo.updateTask(task, updateTaskDto, transaction);
+  }
+
+  /**
+   * Marks task complete
+   * @param task
+   * @param transaction
+   */
+  @Redirect('/dashboard')
+  @UseInterceptors(TaskBelongsToUserInterceptor, TransactionInterceptor)
+  @Patch(':taskId/mark-complete')
+  public async markComplete(
+    @Param('taskId', MapTaskPipe) task: TaskModel,
+    @ReqTransaction() transaction?: Transaction,
+  ): Promise<TaskModel> {
+    return this.taskRepo.updateTask(
+      task,
+      { completed_on: new Date() },
+      transaction,
+    );
+  }
+
+  /**
+   * Marks task complete
+   * @param task
+   * @param transaction
+   */
+  @Redirect('/dashboard')
+  @UseInterceptors(TaskBelongsToUserInterceptor, TransactionInterceptor)
+  @Patch(':taskId/mark-in-complete')
+  public async markInComplete(
+    @Param('taskId', MapTaskPipe) task: TaskModel,
+    @ReqTransaction() transaction?: Transaction,
+  ): Promise<TaskModel> {
+    return this.taskRepo.updateTask(task, { completed_on: null }, transaction);
   }
 }

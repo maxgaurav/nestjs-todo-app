@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TaskController } from './task.controller';
+import { editTaskRedirect, TaskController } from './task.controller';
 import { TransactionProviderService } from '../../../transaction-manager/services/transaction-provider/transaction-provider.service';
 import { TaskRepoService } from '../../services/task-repo/task-repo.service';
 import { UrlGeneratorService } from 'nestjs-url-generator';
 import { TaskModel } from '../../../databases/models/task.model';
 import { UserModel } from '../../../databases/models/user.model';
 import { StoreTaskDto } from '../../dtos/store-task/store-task.dto';
+import * as mockdate from 'mockdate';
 
 describe('TaskController', () => {
   let controller: TaskController;
@@ -115,5 +116,40 @@ describe('TaskController', () => {
 
     expect(await controller.update(task, data, transaction)).toEqual(task);
     expect(updateSpy).toHaveBeenCalledWith(task, data, transaction);
+  });
+
+  it('should mark task as complete', async () => {
+    const task: TaskModel = { id: 1 } as any;
+    const updateTaskSpy = jest
+      .spyOn(taskRepo, 'updateTask')
+      .mockReturnValue(Promise.resolve(task));
+    const transaction = null;
+    const date = new Date();
+    mockdate.set(date);
+    expect(await controller.markComplete(task, transaction)).toEqual(task);
+    expect(updateTaskSpy).toHaveBeenCalledWith(
+      task,
+      { completed_on: date },
+      transaction,
+    );
+  });
+
+  it('should mark task as in complete', async () => {
+    const task: TaskModel = { id: 1 } as any;
+    const updateTaskSpy = jest
+      .spyOn(taskRepo, 'updateTask')
+      .mockReturnValue(Promise.resolve(task));
+    const transaction = null;
+    expect(await controller.markInComplete(task, transaction)).toEqual(task);
+    expect(updateTaskSpy).toHaveBeenCalledWith(
+      task,
+      { completed_on: null },
+      transaction,
+    );
+  });
+
+  it('should return correct redirect url', () => {
+    const task: TaskModel = { id: 1 } as any;
+    expect(editTaskRedirect(task, {} as any)).toEqual(`/tasks/${task.id}/edit`);
   });
 });
